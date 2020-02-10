@@ -1,10 +1,10 @@
 from tkinter import *
-from pyautogui import *
+import pyautogui as autopy
 
 
 app =Tk()
 app.title('AutoClicker')
-app.geometry('450x500')
+app.geometry('450x300')
 
 
 def validate(string_counter):
@@ -18,7 +18,7 @@ def validate(string_counter):
 
 def AutoClicker(counterprint,x,y):
     for i in range(counterprint):
-        pyautogui.click(x,y)
+        autopy.click(x,y)
         
 def start():
     string_counter=counter.get()
@@ -27,32 +27,33 @@ def start():
         errorLabel.pack()
     else:
         counterprint=setcounterInt(string_counter)
-        x,y=FindSkip()
-        AutoClicker(counterprint,x,y)
+        buttonLocation=autopy.locateCenterOnScreen('reddit.png')
+        if buttonLocation==None:
+            errorLabel2.pack()
+        else:
+            AutoClicker(counterprint,buttonLocation[0],buttonLocation[1])
 
 def setcounterInt(string_counter):
     return int(string_counter)
 
-def FindSkip():
-    x,y,width,height=pyautogui.locateOnScreen('skip.png')
-    x=(x+(x+width)/2)
-    y=(y+(x+height)/2)
-    return x,y
+    
 
 
 counter=StringVar()
 errorLabel=Label(app, text='Invalid Value',font=('bold',10),fg='red')
+errorLabel2=Label(app, text='Not Found',font=('bold',10),fg='red')
 counterLabel=Label(app, text='Click Counter', font=('bold',14))
-counterLabel.pack()
+counterLabel.pack(pady=10)
 counterEntry=Entry(app,textvariable=counter)
-counterEntry.pack()
+counterEntry.pack(pady=10)
 counterprint=0
 startButton = Button(app,text='Skip',width=15, command=start,pady=10)
 startButton.pack()
-counterLeftCounterLabel=Label(app,text=str(counterprint),font=('bold',25))
-counterLeftCounterLabel.pack()
 counterLeftLabel=Label(app, text='Clicks Left', font=('bold',14))
-counterLeftLabel.pack()
+counterLeftLabel.pack(side=BOTTOM,pady=20)
+counterLeftCounterLabel=Label(app,text=str(counterprint),font=('bold',40))
+counterLeftCounterLabel.pack(side=BOTTOM)
+
 
 #def get
 
